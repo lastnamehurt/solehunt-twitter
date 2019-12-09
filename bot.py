@@ -44,11 +44,4 @@ class SoleHuntBot(object):
 
 if __name__ == '__main__':
     logging.info('Starting Twitter Bot')
-    while True:
-        try:
-            logging.info("Starting Twitter-Solehunt Bot")
-            SoleHuntBot().run()
-        except KeyboardInterrupt:
-            sys.exit()
-        except:
-            pass
+    SoleHuntBot().run()
