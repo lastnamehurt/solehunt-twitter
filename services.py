@@ -126,67 +126,7 @@ class TweetService:
                 time.sleep(MIN_INTERVAL * 2)
                 continue
 
-    # def build_hashtags_list(self):
-    #     """
-    #     builds list of hashtags from default list
-    #     """
-    #     query = _get_tags(DEFAULT_TAGS)
-    #     try:
-    #         response = requests.get(RELATED_HASHTAGS_API.format(query))
-    #         if response.status_code == RATE_LIMIT_EXCEEDED:
-    #             log.info("Cant fetch. Waiting some time\n{}".format(response.text))
-    #             time.sleep(60 * 2)
-    #             response = requests.get(RELATED_HASHTAGS_API.format(query))
-    #         res = json.loads(response.text)['result']
-    #         return [r['hashtag'] for r in res]
-    #     except Exception as (e):
-    #         log.info("Exception: {}".format(e))
-    #
-    # def get_most_influenced_tweet(self, query=None):
-    #     """
-    #     I want the tag with the most tweets ->
-    #     [tagToLike['tag'] for tagToLike in result if tagToLike['tweets'] == max([data['tweets'] for data in result])] -> [jordanretro]
-    #     :param query:
-    #     :return:
-    #     """
-    #     tags = self.build_hashtags_list()
-    #     while True:
-    #         if not query:
-    #             query = random.choice(tags)
-    #             # remove tag from tags list just in case this doesn't return good results
-    #             tags.remove(query)
-    #             log.info("Hashtag: {}".format(query))
-    #         tweets = self.api.search(q=query, lang='en')
-    #         try:
-    #             post, user = [(tweet, tweet.user) for tweet in tweets if
-    #                           tweet.user.followers_count == max([tweet.user.followers_count for tweet in tweets])][0]
-    #             log.info("Liking Tweet: <{}>\nUser: {}".format(post.text, user.screen_name))
-    #             return post, user
-    #         except Exception as (e):
-    #             log.info ("Issue with tag {}\n{}".format(query, e))
-    #             continue
-    #
-    # def like_most_influenced_tweet(self, query=None):
-    #     """
-    #     Creates saved searches that can be used for automatic likes
-    #     :param query:
-    #     :return:
-    #     """
-    #     if not query:
-    #         post, user = self.get_most_influenced_tweet()
-    #     else:
-    #         post, user = self.get_most_influenced_tweet(query=query)
-    #     log.info("Liking Tweet: <{}>\nUser: {}".format(post.text, user.screen_name))
-    #
-    #     if not post.retweeted and user.followers_count >= MAX_FOLLOWERS_COUNT:
-    #         post.retweet()
-    #         post.favorite()
-    #     if post.retweet_count >= RETWEET_THRESHOLD and user.followers_count >= MAX_FOLLOWERS_COUNT:
-    #         user.follow()
-    #     # if not post.favorited and user.followers_count >= MIN_FOLLOWERS_COUNT:
-    #     #     post.favorite()
-    #
-    #     return post, user
-
+    def _reset(self):
+        self.__init__()
 
 tweetService = TweetService()

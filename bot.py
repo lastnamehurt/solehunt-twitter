@@ -16,8 +16,11 @@ class SoleHuntBot(object):
     # def __init__(self):
     #     tweetService.engage_tweets()
 
-    def schedule_engage_tweets(self, interval=50):
+    def schedule_engage_tweets(self, interval=45):
         schedule.every(interval).minutes.do(tweetService.engage_tweets)
+
+    def schedule_reset(self, interval=20):
+        schedule.every(interval).minutes.do(tweetService.__init__)
 
     def run(self):
         """
@@ -26,6 +29,7 @@ class SoleHuntBot(object):
         """
         # set schedule
         self.schedule_engage_tweets()
+        self.schedule_reset()
         log.info(schedule.jobs)
         # run now
         tweetService.engage_tweets()
@@ -33,7 +37,7 @@ class SoleHuntBot(object):
         while True:
             try:
                 schedule.run_pending()
-                log.info("Jobs: {}".format(schedule.jobs))
+                print("Jobs: {}".format(schedule.jobs))
             except KeyboardInterrupt:
                 sys.exit()
 
