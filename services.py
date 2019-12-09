@@ -8,7 +8,7 @@ from config import authenticate
 from constants import MIN_INTERVAL, ONE, TEN, ZERO
 from utils import has_enough_retweets, rate_limit_ok, rate_limit_too_low
 
-log = logging.getLogger("solehunt-twitter-bot")
+logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(levelname)s | %(funcName)s |%(message)s')
 _get_tags = lambda search_terms: random.choice(search_terms)
 
 
@@ -24,10 +24,10 @@ class TweetService:
 
     def _get_ids_for_users_followed(self, ids=None):
         if not ids or self.ids_cache:
-            print("Collecting ids for users I follow")
+            logging("Collecting ids for users I follow")
             ids = self.api.friends_ids()
         self.ids_cache.extend(ids)
-        print("Returning {} ids".format(len(ids)))
+        logging("Returning {} ids".format(len(ids)))
         return ids
 
     def _store_user(self, user_id=None):
@@ -48,9 +48,9 @@ class TweetService:
             self.store_users(self.ids_cache)
         for i in self.ids_cache:
             user = self.users_cache[i]
-            print("Getting tweets from {}".format(user.screen_name))
+            logging("Getting tweets from {}".format(user.screen_name))
             if user.followers_count >= count:
-                print("Adding {} to return list".format(user.screen_name))
+                logging("Adding {} to return list".format(user.screen_name))
                 users_with_desired_followers_count.append(user)
         return users_with_desired_followers_count
 
@@ -60,16 +60,16 @@ class TweetService:
         """
         users = self.get_followed_by_followers_count()
         rate_limit = self.get_rate_limit('users', '/users/show/:id')
-        print("followed_ids count: {}".format(len(users)))
-        print("monitoring rate limit: {}".format(rate_limit))
+        logging("followed_ids count: {}".format(len(users)))
+        logging("monitoring rate limit: {}".format(rate_limit))
 
         while rate_limit_ok(rate_limit):
-            print("rate limit ok: {}".format(rate_limit_ok(rate_limit)))
+            logging("rate limit ok: {}".format(rate_limit_ok(rate_limit)))
             for _user in users:
                 user = self.users_cache[_user.id]
-                print("Collecting user {}".format(user.screen_name))
+                logging("Collecting user {}".format(user.screen_name))
                 self.tweets_cache[user.status.id] = {"tweet": user.status.text, 'status': user.status}
-                print("Updated cache with tweet from {}".format(user.screen_name))
+                logging("Updated cache with tweet from {}".format(user.screen_name))
                 time.sleep(1)
                 rate_limit = self.get_rate_limit('users', '/users/show/:id')
                 if rate_limit_too_low(rate_limit):
@@ -90,20 +90,20 @@ class TweetService:
 
     def _engage_tweet(self, tweet):
         if tweet['status'].favorited:
-            print("Already liked")
+            logging("Already liked")
             return
-        print("engaging tweet_id {}".format(tweet['status'].id))
+        logging("engaging tweet_id {}".format(tweet['status'].id))
         if has_enough_retweets(tweet['status'].retweet_count):
             if not tweet['status'].retweeted:
                 try:
                     tweet['status'].retweet()
-                    print("Retweeted")
+                    logging("Retweeted")
                 except:
                     pass
         if not tweet['status'].favorited:
             try:
                 tweet['status'].favorite()
-                print("Liked!")
+                logging("Liked!")
             except:
                 pass
 
@@ -119,7 +119,7 @@ class TweetService:
         for tweet_id, tweet in self.tweets_cache.iteritems():
             if tweet['status'].entities['urls']:
                 url = tweet['status'].entities['urls'][0]['url']
-                print("Engaging tweet {}".format(url))
+                logging("Engaging tweet {}".format(url))
             self._engage_tweet(tweet)
             limit -= ONE
             time.sleep(ONE)
