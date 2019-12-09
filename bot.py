@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 import logging
 import sys
+import time
 
 import schedule
 
@@ -38,6 +39,7 @@ class SoleHuntBot(object):
             try:
                 schedule.run_pending()
                 logging.info("Jobs: {}".format(schedule.jobs))
+                time.sleep(1)
             except KeyboardInterrupt:
                 sys.exit()
 
