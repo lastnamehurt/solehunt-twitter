@@ -43,7 +43,7 @@ class SoleHuntBot(object):
 
 
 if __name__ == '__main__':
-    loging.info('Starting Twitter Bot')
+    logging.info('Starting Twitter Bot')
     while True:
         try:
             logging.info("Starting Twitter-Solehunt Bot")
