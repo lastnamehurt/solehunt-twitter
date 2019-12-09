@@ -21,7 +21,7 @@ DEFAULT_TAGS = [
 # search tweets with tag
 # find matching user with most followers
 # like the tweet
-
+NON_ENGAGED_FRIENDS_LIST = 'sneaker-friends'
 RETWEET_THRESHOLD = 20
 MAX_FOLLOWERS_COUNT = 500
 MIN_FOLLOWERS_COUNT = 500

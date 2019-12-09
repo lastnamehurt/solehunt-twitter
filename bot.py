@@ -22,6 +22,9 @@ class SoleHuntBot(object):
     def schedule_reset(self, interval=20):
         schedule.every(interval).minutes.do(tweetService._reset)
 
+    def schedule_follow_retweeters(self, interval=4):
+        schedule.every(interval).hours.do(tweetService.follow_retweeters)
+
     def run(self):
         """
         Runs scheduled jobs
@@ -30,6 +33,7 @@ class SoleHuntBot(object):
         self.schedule_reset()
         # set schedule
         self.schedule_engage_tweets()
+        self.schedule_follow_retweeters()
         logging.info(schedule.jobs)
         # run now
         tweetService.engage_tweets()
