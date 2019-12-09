@@ -30,7 +30,7 @@ class SoleHuntBot(object):
         # set schedule
         self.schedule_engage_tweets()
         self.schedule_reset()
-        log.info(schedule.jobs)
+        print(schedule.jobs)
         # run now
         tweetService.engage_tweets()
         # start schedule
@@ -43,5 +43,5 @@ class SoleHuntBot(object):
 
 
 if __name__ == '__main__':
-    log.info("Starting Twitter-Solehunt Bot")
+    print("Starting Twitter-Solehunt Bot")
     SoleHuntBot().run()

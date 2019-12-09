@@ -24,6 +24,6 @@ def authenticate():
     except Exception as e:
         log.error("Error creating API", exc_info=True)
         raise e
-    log.info("API created")
+    print("API created")
 
     return api

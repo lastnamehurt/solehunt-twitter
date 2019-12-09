@@ -24,10 +24,10 @@ class TweetService:
 
     def _get_ids_for_users_followed(self, ids=None):
         if not ids or self.ids_cache:
-            log.info("Collecting ids for users I follow")
+            print("Collecting ids for users I follow")
             ids = self.api.friends_ids()
         self.ids_cache.extend(ids)
-        log.info("Returning {} ids".format(len(ids)))
+        print("Returning {} ids".format(len(ids)))
         return ids
 
     def _store_user(self, user_id=None):
@@ -48,9 +48,9 @@ class TweetService:
             self.store_users(self.ids_cache)
         for i in self.ids_cache:
             user = self.users_cache[i]
-            log.info("Getting tweets from {}".format(user.screen_name))
+            print("Getting tweets from {}".format(user.screen_name))
             if user.followers_count >= count:
-                log.info("Adding {} to return list".format(user.screen_name))
+                print("Adding {} to return list".format(user.screen_name))
                 users_with_desired_followers_count.append(user)
         return users_with_desired_followers_count
 
@@ -60,16 +60,16 @@ class TweetService:
         """
         users = self.get_followed_by_followers_count()
         rate_limit = self.get_rate_limit('users', '/users/show/:id')
-        log.info("followed_ids count: {}".format(len(users)))
-        log.info("monitoring rate limit: {}".format(rate_limit))
+        print("followed_ids count: {}".format(len(users)))
+        print("monitoring rate limit: {}".format(rate_limit))
 
         while rate_limit_ok(rate_limit):
-            log.info("rate limit ok: {}".format(rate_limit_ok(rate_limit)))
+            print("rate limit ok: {}".format(rate_limit_ok(rate_limit)))
             for _user in users:
                 user = self.users_cache[_user.id]
-                log.info("Collecting user {}".format(user.screen_name))
+                print("Collecting user {}".format(user.screen_name))
                 self.tweets_cache[user.status.id] = {"tweet": user.status.text, 'status': user.status}
-                log.info("Updated cache with tweet from {}".format(user.screen_name))
+                print("Updated cache with tweet from {}".format(user.screen_name))
                 time.sleep(1)
                 rate_limit = self.get_rate_limit('users', '/users/show/:id')
                 if rate_limit_too_low(rate_limit):
@@ -90,20 +90,20 @@ class TweetService:
 
     def _engage_tweet(self, tweet):
         if tweet['status'].favorited:
-            log.info("Already liked")
+            print("Already liked")
             return
-        log.info("engaging tweet_id {}".format(tweet['status'].id))
+        print("engaging tweet_id {}".format(tweet['status'].id))
         if has_enough_retweets(tweet['status'].retweet_count):
             if not tweet['status'].retweeted:
                 try:
                     tweet['status'].retweet()
-                    log.info("Retweeted")
+                    print("Retweeted")
                 except:
                     pass
         if not tweet['status'].favorited:
             try:
                 tweet['status'].favorite()
-                log.info("Liked!")
+                print("Liked!")
             except:
                 pass
 
@@ -117,7 +117,7 @@ class TweetService:
             # create cache if it does not exist
             self.get_relevant_tweets_from_followed()
         for tweet_id, tweet in self.tweets_cache.iteritems():
-            log.info("Engaging tweet {}".format(tweet['status'].text))
+            print("Engaging tweet {}".format(tweet['status'].text))
             self._engage_tweet(tweet)
             limit -= ONE
             time.sleep(ONE)
