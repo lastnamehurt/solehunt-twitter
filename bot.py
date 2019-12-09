@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 
 import logging
-import sys
 import time
 
 import schedule
@@ -34,16 +33,11 @@ class SoleHuntBot(object):
         logging.info(schedule.jobs)
         # run now
         tweetService.engage_tweets()
-        # start schedule
-        while True:
-            try:
-                schedule.run_pending()
-                logging.info("Jobs: {}".format(schedule.jobs))
-                time.sleep(1)
-            except KeyboardInterrupt:
-                sys.exit()
 
 
 if __name__ == '__main__':
     logging.info('Starting Twitter Bot')
     SoleHuntBot().run()
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
