@@ -7,7 +7,7 @@ import schedule
 
 from services import tweetService
 
-log = logging.getLogger("solehunt-twitter-bot")
+logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(levelname)s | %(funcName)s |%(message)s')
 
 
 class SoleHuntBot(object):
@@ -20,7 +20,7 @@ class SoleHuntBot(object):
         schedule.every(interval).minutes.do(tweetService.engage_tweets)
 
     def schedule_reset(self, interval=20):
-        schedule.every(interval).minutes.do(tweetService.__init__)
+        schedule.every(interval).minutes.do(tweetService._reset)
 
     def run(self):
         """
@@ -30,18 +30,25 @@ class SoleHuntBot(object):
         # set schedule
         self.schedule_engage_tweets()
         self.schedule_reset()
-        print(schedule.jobs)
+        logging.info(schedule.jobs)
         # run now
         tweetService.engage_tweets()
         # start schedule
         while True:
             try:
                 schedule.run_pending()
-                print("Jobs: {}".format(schedule.jobs))
+                logging.info("Jobs: {}".format(schedule.jobs))
             except KeyboardInterrupt:
                 sys.exit()
 
 
 if __name__ == '__main__':
-    print("Starting Twitter-Solehunt Bot")
-    SoleHuntBot().run()
+    loging.info('Starting Twitter Bot')
+    while True:
+        try:
+            logging.info("Starting Twitter-Solehunt Bot")
+            SoleHuntBot().run()
+        except KeyboardInterrupt:
+            sys.exit()
+        except:
+            pass

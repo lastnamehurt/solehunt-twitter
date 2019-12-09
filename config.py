@@ -2,7 +2,7 @@ import logging
 import os
 import tweepy
 
-log = logging.getLogger("solehunt-twitter-bot")
+logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(levelname)s | %(funcName)s |%(message)s')
 
 TWITTER_CONSUMER_KEY = os.environ.get('TWITTER_CONSUMER_KEY')
 TWITTER_CONSUMER_SECRET = os.environ.get('TWITTER_CONSUMER_SECRET')
@@ -21,8 +21,9 @@ def authenticate():
                      wait_on_rate_limit_notify=True)
     try:
         api.verify_credentials()
+        logging.info("Verified. Logging ins")
     except Exception as e:
-        log.error("Error creating API", exc_info=True)
+        logging.error("Error creating API", exc_info=True)
         raise e
     print("API created")
 
