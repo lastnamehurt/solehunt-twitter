@@ -117,7 +117,7 @@ class TweetService:
             # create cache if it does not exist
             self.get_relevant_tweets_from_followed()
         for tweet_id, tweet in self.tweets_cache.iteritems():
-            print("Engaging tweet {}".format(tweet['status'].text))
+            print("Engaging tweet {}".format(tweet['status'].id))
             self._engage_tweet(tweet)
             limit -= ONE
             time.sleep(ONE)
