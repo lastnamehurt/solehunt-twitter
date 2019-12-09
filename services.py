@@ -130,7 +130,10 @@ class TweetService:
                 continue
 
     def _reset(self):
-        self.__init__()
+        self.ids_cache = []
+        self.tweets_cache = {}
+        self.users_cache = {}
+        self._get_ids_for_users_followed()
 
 
 tweetService = TweetService()
