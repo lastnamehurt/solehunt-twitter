@@ -27,9 +27,9 @@ class SoleHuntBot(object):
         Runs scheduled jobs
         :return:
         """
+        self.schedule_reset()
         # set schedule
         self.schedule_engage_tweets()
-        self.schedule_reset()
         logging.info(schedule.jobs)
         # run now
         tweetService.engage_tweets()
