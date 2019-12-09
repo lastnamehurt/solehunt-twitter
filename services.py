@@ -68,12 +68,13 @@ class TweetService:
             for _user in users:
                 user = self.users_cache[_user.id]
                 logging.info("Collecting user {}".format(user.screen_name))
-                self.tweets_cache[user.status.id] = {"tweet": user.status.text, 'status': user.status}
-                logging.info("Updated cache with tweet from {}".format(user.screen_name))
-                time.sleep(1)
-                rate_limit = self.get_rate_limit('users', '/users/show/:id')
+                if not user.status.favorited:
+                    self.tweets_cache[user.status.id] = {"tweet": user.status.text, 'status': user.status}
+                    logging.info("Updated cache with tweet from {}".format(user.screen_name))
+                    time.sleep(1)
+                    rate_limit = self.get_rate_limit('users', '/users/show/:id')
                 if rate_limit_too_low(rate_limit):
-                    log.warn("Rate limit met")
+                    logging.warn("Rate limit met")
                     break
             break
         return self.tweets_cache
