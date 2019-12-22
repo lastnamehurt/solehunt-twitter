@@ -16,10 +16,10 @@ class SoleHuntBot(object):
     # def __init__(self):
     #     tweetService.engage_tweets()
 
-    def schedule_engage_tweets(self, interval=45):
-        schedule.every(interval).minutes.do(tweetService.engage_tweets)
+    def schedule_engage_tweets(self, interval=2):
+        schedule.every(interval).hours.do(tweetService.engage_tweets)
 
-    def schedule_reset(self, interval=20):
+    def schedule_reset(self, interval=115):
         schedule.every(interval).minutes.do(tweetService._reset)
 
     def schedule_follow_retweeters(self, interval=4):
